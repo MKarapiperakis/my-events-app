@@ -1,1 +1,1 @@
-# my-events-app
+# MyEventsApp

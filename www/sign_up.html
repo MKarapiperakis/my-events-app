@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.84.0">
+  <title>Δημιουργία Λογαριασμού</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" href="css/show-password-toggle.css">
+  <link rel="icon" type="image/x-icon" href="logo\icon.ico">
+<script src="js/rotate.js"></script>
+  <!-- Bootstrap core CSS -->
+  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .error {
+      font-size: 13px;
+      text-align: left;
+      color: red;
+      margin-bottom: 3%;
+
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="css/signin.css" rel="stylesheet">
+  <link href="css/network.css" rel="stylesheet">
+  <link href="css/rotate.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" id="nav">
+    <div class="container-fluid">
+
+
+      <a class="navbar-toggler collapsed border-0" type="button" data-toggle="collapse" data-target="#collapsingNavbar" style = "background: #343a40">
+            <span> </span>
+            <span> </span>
+            <span> </span>
+        </a>
+      <div class="collapse navbar-collapse justify-content-between" id="collapsingNavbar" >
+        <ul class="navbar-nav ">
+
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="showEvents.html">Εκδηλώσεις</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="sign_up.html">Εγγραφή</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="sign_in.html">Σύνδεση</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="form-signin">
+    <div class="offline" id="offline">
+      <img src="images/no-wifi.png">
+    </div>
+    <h1 class="h3 mb-3 text-center">Δημιουργία Λογαριασμού</h1>
+
+    <img src="upload/default.png" alt="Avatar" class="avatar" id="image">
+    <br>
+    <button class="image_button" id="btn">Νέα εικόνα</button>
+    <br>
+    <button class="image_button" id="btn2">Υπάρχουσα εικόνα</button>
+    <br>
+
+
+    <input type="text" name="username" id="username" class="form-control mb-0" maxlength=20 autofocus
+      placeholder="Όνομα Χρήστη">
+    <div class="error" id="uname"> </div>
+
+
+
+
+    <input type="email" name="email" id="email" class="form-control mb-0" maxlength=30 autofocus placeholder="Email">
+    <div class="error" id="mail"> </div>
+
+
+
+    <div class="input-group">
+      <input type="password" id="password" name="current-password" autocomplete="current-password"
+        class="form-control rounded mb-1" spellcheck="false" autocorrect="off" autocapitalize="off" maxlength=20
+        autofocus placeholder="Κωδικός Πρόσβασης">
+
+      <button id="toggle-password" type="button" class="d-none"
+        aria-label="Show password as plain text. Warning: this will display your password on the screen.">
+      </button>
+
+    </div>
+    <div class="error" id="pass"> </div>
+    <div id="progr" class="progress" style="height: 0px;">
+      <div id="bar" class="progress-bar " style="width:0%;background: none;">0%</div>
+    </div>
+    <button class="btn btn-lg btn-primary w-100 mt-3" type="submit" onclick="signup(event)">
+      Εγγραφή
+    </button>
+
+
+  </main>
+
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+
+
+  <script src="js/show-password-toggle.min.js" async=""></script>
+  <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/ready.js" async=""></script>
+  <script src="js/network_status.js" async=""></script>
+
+  <script>
+ var rotate = false;
+
+
+
+    const input = document.getElementsByName("current-password")[0];
+    input.addEventListener('input', updateValue);
+    var case1 = false;
+    var case1_1 = false;
+
+    var case2 = false;
+    var case2_1 = false;
+
+    var case3 = false;
+    var case3_1 = false;
+
+    var accept = false;
+
+    function updateValue(e) {
+      const isContainsNumber = /^(?=.*[0-9]).*$/;
+      const isValidLength = /^.{8,20}$/;
+      const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
+
+
+      if (e.target.value.length > 0)
+        document.getElementById("progr").style.height = "22px";
+      else
+        document.getElementById("progr").style.height = "0px";
+
+      //case 2
+
+
+      if (isValidLength.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+
+        //alert(currentWidth);
+        if (case2 == false) {
+          case2 = true;
+          case2_1 = false;
+          if (currentWidth == "0%")
+            document.getElementById("bar").style.width = 30 + "%";
+          else if (currentWidth == "30%")
+            document.getElementById("bar").style.width = 60 + "%";
+          else if (currentWidth == "40%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "70%")
+            document.getElementById("bar").style.width = 100 + "%";
+
+          currentWidth = document.getElementById("bar").style.width;
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+
+        }
+      }
+      else if (!isValidLength.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+
+        //alert(currentWidth);
+        if (case2_1 == false) {
+          case2_1 = true;
+          case2 = false;
+          if (currentWidth == "100%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "30%")
+            document.getElementById("bar").style.width = 0 + "%";
+          else if (currentWidth == "60%")
+            document.getElementById("bar").style.width = 30 + "%";
+          else if (currentWidth == "70%")
+            document.getElementById("bar").style.width = 40 + "%";
+          currentWidth = document.getElementById("bar").style.width;
+
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+        }
+      }
+
+      //case 3
+
+
+      if (isContainsSymbol.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+
+        //alert(currentWidth);
+        if (case3 == false) {
+          case3 = true;
+          case3_1 = false;
+          if (currentWidth == "0%")
+            document.getElementById("bar").style.width = 40 + "%";
+          else if (currentWidth == "30%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "60%")
+            document.getElementById("bar").style.width = 100 + "%";
+
+          currentWidth = document.getElementById("bar").style.width;
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+
+        }
+      }
+      else if (!isContainsSymbol.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+        //alert(currentWidth);
+        if (case3_1 == false) {
+          case3_1 = true;
+          case3 = false;
+          if (currentWidth == "100%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "70%")
+            document.getElementById("bar").style.width = 30 + "%";
+          else if (currentWidth == "40%")
+            document.getElementById("bar").style.width = 0 + "%";
+          currentWidth = document.getElementById("bar").style.width;
+
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+        }
+      }
+
+      if (isContainsNumber.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+
+
+        if (case1 == false) {
+          case1 = true;
+          case1_1 = false;
+          if (currentWidth == "0%")
+            document.getElementById("bar").style.width = 30 + "%";
+          else if (currentWidth == "30%")
+            document.getElementById("bar").style.width = 60 + "%";
+          else if (currentWidth == "40%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "70%")
+            document.getElementById("bar").style.width = 100 + "%";
+
+          currentWidth = document.getElementById("bar").style.width;
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+
+        }
+      }
+      else if (!isContainsNumber.test(e.target.value)) {
+        let currentWidth = document.getElementById("bar").style.width;
+
+        //alert(currentWidth);
+        if (case1_1 == false) {
+          case1_1 = true;
+          case1 = false;
+          if (currentWidth == "100%")
+            document.getElementById("bar").style.width = 70 + "%";
+          else if (currentWidth == "30%")
+            document.getElementById("bar").style.width = 0 + "%";
+          else if (currentWidth == "60%")
+            document.getElementById("bar").style.width = 30 + "%";
+          else if (currentWidth == "70%")
+            document.getElementById("bar").style.width = 40 + "%";
+          currentWidth = document.getElementById("bar").style.width;
+
+          width = currentWidth.replace("%", " ");
+          if (width <= 30) {
+            document.getElementById("bar").style.backgroundColor = "red";
+            document.getElementById("bar").innerHTML = "Μη ισχυρός";
+            accept = false;
+          }
+          else if (width > 30 && width <= 70) {
+            document.getElementById("bar").style.backgroundColor = "blue";
+            document.getElementById("bar").innerHTML = "Ισχυρός";
+            accept = true;
+          }
+          else if (width > 70) {
+            document.getElementById("bar").style.backgroundColor = "green";
+            document.getElementById("bar").innerHTML = "Πολύ ισχυρός";
+            accept = true;
+          }
+
+        }
+      }
+
+    }
+
+
+  </script>
+
+
+  <script>
+
+
+    function navigatetomain() {
+      window.location.replace("index.html");
+    }
+
+    function logoHover() {
+      document.getElementById("logo").style.cursor = "pointer";
+    }
+
+    function signup(event) {
+      event.preventDefault();
+
+      var username = document.getElementById("username").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      var flag = 0;
+
+      var nameRegex = /^[a-zA-Z0-9]+$/;
+      var validUsername = username.match(nameRegex);
+
+      //var emailRegex = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/ ;
+      var emailRegex = "[a-zA-Z0-9_\\.\\+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-\\.]+";
+      var validEmail = email.match(emailRegex);
+
+      if (validUsername == null) {
+        document.getElementById("username").style = "border: 1px solid red; background: url(images/wrong.png) no-repeat scroll 7px 7px; background-size: 35px 34px; background-position: 100% 1px;";
+        document.getElementById("uname").innerHTML = "Invalid username";
+
+
+      }
+      else {
+        document.getElementById("username").style = "border: 1px solid green;background: url(images/correct.png) no-repeat scroll 7px 7px; background-size: 25px 24px; background-position: 98% 5px";
+        flag++;
+        document.getElementById("uname").innerHTML = "";
+      }
+
+      if (validEmail == null) {
+        document.getElementById("email").style = "border: 1px solid red; background: url(images/wrong.png) no-repeat scroll 7px 7px; background-size: 35px 34px; background-position: 100% 1px";
+        document.getElementById("mail").innerHTML = "Invalid Email";
+
+
+      }
+      else {
+        document.getElementById("email").style = "border: 1px solid green;background: url(images/correct.png) no-repeat scroll 7px 7px; background-size: 25px 24px; background-position: 98% 5px";
+        flag++;
+        document.getElementById("mail").innerHTML = "";
+      }
+
+      if (accept == true) {
+        document.getElementById("password").style = "border: 1px solid green;background: url(images/correct.png) no-repeat scroll 7px 7px; background-size: 25px 24px; background-position: 98% 5px";
+        flag++;
+        document.getElementById("pass").innerHTML = "";
+      }
+      else {
+        document.getElementById("password").style = "border: 1px solid red; ";
+        document.getElementById("pass").innerHTML = "Invalid Password";
+      }
+
+
+
+
+
+      var url = "http://myuopevents.com/php/cordovaRegister.php";
+
+
+      var dataString = "username=" + username + "&email=" + email + "&password=" + password;
+
+      if (flag == 3) {
+        $.ajax({
+          type: "GET", crossDomain: true, cache: false,
+          url: url,
+          data: dataString,
+          dataType: 'jsonp',
+          jsonp: "callback",
+          success: function (data) {
+
+            if (data[0].answer == "success") {
+
+              intUpload(username);	//upload the selected image
+
+
+            }
+            else {
+              //alert(data);
+              document.getElementById("username").style = "border: 1px solid red; background: url(images/wrong.png) no-repeat scroll 7px 7px; background-size: 35px 34px; background-position: 100% 1px";
+              document.getElementById("uname").innerHTML = "Username already exists";
+            }
+
+          }
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

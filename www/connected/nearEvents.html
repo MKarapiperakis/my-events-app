@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- <script src="../scripts/maps.js"></script> -->
+
+
+
+  <title>Κοντινές εκδηλώσεις</title>
+  <link rel="icon" type="image/x-icon" href="../logo/icon.ico">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-fixed/">
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+
+  <link rel="icon" type="image/x-icon" href="../logo\icon.ico">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="../js/validate.js" async=""></script>
+  <script src="../js/rotate.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+
+  <link href="../css/style.css" rel="stylesheet">
+  <link href="../css/signin.css" rel="stylesheet">
+  <link href="../css/addEvent.css" rel="stylesheet">
+
+  <style>
+    body {
+      padding-top: 45px;
+      height: 800px;
+    }
+
+    #getPosition {
+      border-radius: 50px;
+      border: 1px solid white;
+      background-color: skyblue;
+      padding: 10px;
+      width: 30%;
+      margin-bottom: 20px;
+    }
+
+    #map {
+      height: 500px;
+      width: 100vw;
+      padding: 0;
+      margin: 0;
+      border-radius: 0px;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    #panel {
+      position: relative;
+      width: 100vw;
+      margin-top: 5%;
+      padding: 10px;
+      background: transparent;
+      min-height: 300px;
+      max-height: 300px;
+      display: none;
+    }
+  </style>
+  <link href="../css/network.css" rel="stylesheet">
+  <link href="../css/rotate.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" id="nav">
+    <div class="container-fluid">
+      <!--<a class="navbar-brand active"   onclick="scrollToTop()" onmouseover="logoHover()" id = "logo">My Events</a>-->
+
+      <a class="navbar-toggler collapsed border-0" type="button" data-toggle="collapse" data-target="#collapsingNavbar"
+        style="background: #343a40">
+        <span> </span>
+        <span> </span>
+        <span> </span>
+      </a>
+      <div class="collapse navbar-collapse justify-content-between" id="collapsingNavbar">
+        <ul class="navbar-nav ">
+
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="addEvent.html">Νέα εκδήλωση</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="showEvents.html">Εκδηλώσεις</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Κοντινές εκδηλώσεις</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="editEvent.html">Διαχείριση εκδηλώσεων</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:end();">Αποσύνδεση</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="offline" id="offline">
+      <img src="../images/no-wifi.png">
+    </div>
+    <div class="justify-content-center ">
+
+      <h1>Εύρεση πλησιέστερου χώρου εκδηλώσεων </h1>
+      <button id="getPosition">Αναζήτηση</button>
+
+    </div>
+
+    <div id="map"> </div>
+    <div id="panel"></div>
+
+
+  </main>
+
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="../cordova.js"></script>
+
+  <script src="../js/ready.js" async=""></script>
+  <script src="../js/network_status.js" async=""></script>
+  <script src="../js/gps.js"></script>
+  <script>
+    var rotate = false;
+
+
+
+    function end() {
+      localStorage.clear();
+      window.location.replace("../sign_in.html");
+    }
+
+
+    var name = localStorage.getItem("Name");
+    var userImage = localStorage.getItem("image");
+    document.getElementById("getPosition").addEventListener("click", getPosition);
+    var lat1List = [];
+    var lat2List = [];
+    var lat3List = [];
+    var lat4List = [];
+    var long1List = [];
+    var long2List = [];
+    var long3List = [];
+    var long4List = [];
+    var marklatList = [];
+    var marklongList = [];
+    var maptypeList = [];
+    var idList = [];
+    //--------------------
+
+    //--------------------
+    //event data
+    var dateList = [];
+    var titleList = [];
+    var phoneList = [];
+    var categoryList = [];
+    var descriptionList = [];
+    var paymentList = [];
+
+
+    function getPosition() {
+      document.getElementById("getPosition").style.display = "none";
+      var options = {
+        enableHighAccuracy: true,
+        maximumAge: 3600000
+      }
+      var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+
+      function onSuccess(position) {
+        var Latitude = position.coords.latitude;
+        var Longitude = position.coords.longitude;
+        var selected_zoom = 10;
+
+        let map;
+
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: Latitude, lng: Longitude },
+          zoom: selected_zoom,
+          disableDefaultUI: true,
+          zoomControl: true,
+          mapTypeControl: true,
+          streetViewControl: true,
+          overviewMapControl: true,
+          gestureHandling: "cooperative",
+        });
+
+        var initicon = {
+          url: "http://myuopevents.com/" + userImage, // url
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0, 0), // origin
+          anchor: new google.maps.Point(15, 30) // anchor
+        };
+
+        var initMarker = new google.maps.Marker({
+          position: { lat: Latitude, lng: Longitude },
+          title: "current location",
+          icon: initicon
+        });
+
+        initMarker.setMap(map);
+
+
+        var url = "http://myuopevents.com/php/getPlace.php";
+
+
+        $.ajax({
+          type: "GET",
+          url: url,
+          dataType: 'jsonp',
+          jsonp: "callback",
+
+          success: function (data) {
+            var len = data.length;
+
+
+
+            for (var i = 0; i < len; i++) {
+              lat1List.push(data[i].lat1);
+              lat2List.push(data[i].lat2);
+              lat3List.push(data[i].lat3);
+              lat4List.push(data[i].lat4);
+              long1List.push(data[i].long1);
+              long2List.push(data[i].long2);
+              long3List.push(data[i].long3);
+              long4List.push(data[i].long4);
+              marklatList.push(data[i].marklat);
+              marklongList.push(data[i].marklong);
+              maptypeList.push(data[i].maptype);
+              idList.push(data[i].id);
+            }   //end of loop
+
+            var latitude1 = Latitude;
+            var longitude1 = Longitude;
+
+            var latitude2;
+            var longitude2;
+            var minDistance;
+            var minID;
+            var distance = 0;
+            var p1;
+            var p2;
+            var minLat;
+            var minLong;
+            var pos = 0;
+            for (var i = 0; i < marklatList.length; i++) {
+
+
+              latitude2 = parseFloat(marklatList[i]);
+              longitude2 = parseFloat(marklongList[i]);
+
+              p1 = { lat: latitude1, lng: longitude1 };
+              p2 = { lat: latitude2, lng: longitude2 };
+
+
+              distance = getDistance(p1, p2);
+
+              //alert(distance);
+              if (i == 0) {
+                minDistance = distance;
+                minLat = latitude2;
+                minLong = longitude2;
+                minID = idList[i];
+                pos = i;
+              }
+              else {
+                if (distance <= minDistance) {
+                  minDistance = distance;
+                  minLat = latitude2;
+                  minLong = longitude2;
+                  minID = idList[i];
+                  pos = i;
+                }
+              }
+
+
+
+
+
+
+            } 	//end of loop
+            var destination = { lat: minLat, lng: minLong };
+            minDistance = Math.round(minDistance);
+            minDistance = minDistance / 1000;
+            if (maptypeList[pos] == "default")     //simple marker
+            {
+              var lat = parseFloat(marklatList[pos]);
+              var lng = parseFloat(marklongList[pos]);
+              var icon2 = {
+                url: "http://myuopevents.com/images/map-marker.png", // url
+                scaledSize: new google.maps.Size(30, 30), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(15, 30) // anchor
+              };
+
+              var marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                title: idList[pos],
+                icon: icon2
+              });
+
+              marker.setMap(map);
+              marker.addListener('click', function () {
+                marker.setVisible(false);
+                initMarker.setVisible(false);
+
+                var directionsService = new google.maps.DirectionsService();
+                var directionsDisplay = new google.maps.DirectionsRenderer();
+
+
+
+                directionsDisplay.setMap(map);
+                directionsDisplay.setPanel(document.getElementById('panel'));
+                document.getElementById("panel").style.display = "block";
+                var start = { lat: latitude1, lng: longitude1 };
+                var dest = { lat: minLat, lng: minLong };
+
+                var request = {
+                  origin: start,
+                  destination: dest,
+                  travelMode: google.maps.DirectionsTravelMode.DRIVING
+                };
+
+                directionsService.route(request, function (response, status) {
+                  if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                  }
+                });
+
+              })	//end of event handler
+
+            }
+            else if (maptypeList[pos] == "custom")   //polygon
+            {
+              var icon = {
+                url: "http://myuopevents.com/images/event.ico", // url
+                scaledSize: new google.maps.Size(30, 30), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(15, 20) // anchor
+              };
+
+              const Coords = [
+                { lat: parseFloat(lat1List[pos]), lng: parseFloat(long1List[pos]) },
+                { lat: parseFloat(lat2List[pos]), lng: parseFloat(long2List[pos]) },
+                { lat: parseFloat(lat3List[pos]), lng: parseFloat(long3List[pos]) },
+                { lat: parseFloat(lat4List[pos]), lng: parseFloat(long4List[pos]) },
+              ];
+              // Construct the polygon.
+              const Event = new google.maps.Polygon({
+                paths: Coords,
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.3,
+                strokeWeight: 1,
+                fillColor: "#FF0000",
+                fillOpacity: 0.4,
+              });
+
+              Event.setMap(map);
+
+
+              lat = parseFloat(marklatList[pos]);
+              lng = parseFloat(marklongList[pos]);
+
+              var marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                title: idList[pos],
+                icon: icon
+              });
+
+              marker.setMap(map);
+              marker.addListener('click', function () {
+                marker.setVisible(false);
+                initMarker.setVisible(false);
+
+                var directionsService = new google.maps.DirectionsService();
+                var directionsDisplay = new google.maps.DirectionsRenderer();
+
+
+
+                directionsDisplay.setMap(map);
+                directionsDisplay.setPanel(document.getElementById('panel'));
+                document.getElementById("panel").style.display = "block";
+
+                var start = { lat: latitude1, lng: longitude1 };
+                var dest = { lat: minLat, lng: minLong };
+
+                var request = {
+                  origin: start,
+                  destination: dest,
+                  travelMode: google.maps.DirectionsTravelMode.DRIVING
+                };
+
+                directionsService.route(request, function (response, status) {
+                  if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                  }
+                });
+
+              })
+
+            }//end of if
+
+            const coordinates = [
+              { lat: latitude1, lng: longitude1 },
+              { lat: minLat, lng: minLong },
+
+            ];
+
+            const dist = new google.maps.Polyline({
+              path: coordinates,
+              geodesic: true,
+              strokeColor: "blue",
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+            });
+
+            dist.setMap(map);
+
+
+
+            var myLatlng = new google.maps.LatLng((latitude1 + minLat) / 2, (longitude1 + minLong) / 2);
+
+            var icon = {
+              url: "../images/tag.png", // url
+              scaledSize: new google.maps.Size(70, 30), // scaled size
+              origin: new google.maps.Point(0, 0), // origin
+              anchor: new google.maps.Point(34, 30) // anchor
+
+            };
+
+            var labelMarker = new google.maps.Marker({
+              position: myLatlng,
+              icon: icon,
+              label: minDistance + " km",
+
+            });
+
+            labelMarker.setMap(map);
+
+
+          }   //end of success
+        });    //end of AJAX
+
+        function rad(x) {
+          return x * Math.PI / 180;
+        }
+
+        function getDistance(p1, p2) {
+          var R = 6378137; // Earth’s mean radius in meter
+
+
+          var dLat = rad(p2.lat - p1.lat);
+          var dLong = rad(p2.lng - p1.lng);
+
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+            Math.sin(dLong / 2) * Math.sin(dLong / 2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c;
+
+          return d; // returns the distance in meter
+        }
+
+
+      };
+
+      function onError(error) {
+        //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+        alert("Ενεργοποίησε την τοποθεσία στη συσκευή σου και προσπάθησε ξανά");
+      }
+
+
+
+
+
+    }
+
+
+
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+  <script>
+    //your key here 
+    </script>
+
+
+
+
+
+</body>
+
+</html>
